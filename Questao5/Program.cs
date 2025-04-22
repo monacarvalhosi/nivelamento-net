@@ -1,5 +1,10 @@
 using MediatR;
+using Microsoft.Data.Sqlite;
+using Questao5.Application.Commands;
+using Questao5.Application.Handlers;
+using Questao5.Infrastructure.Configurations;
 using Questao5.Infrastructure.Sqlite;
+using System.Data;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +14,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 
+builder.Services.AddMediatR(typeof(InsertAccountTransactionCommandHandler).Assembly);
+builder.Services.AddMediatR(typeof(GetAccountBalanceHandler).Assembly);
+builder.Services.AddInfrastructure();
 // sqlite
+builder.Services.AddScoped<IDbConnection>(provider => new SqliteConnection("Data Source=database.sqlite"));
 builder.Services.AddSingleton(new DatabaseConfig { Name = builder.Configuration.GetValue<string>("DatabaseName", "Data Source=database.sqlite") });
 builder.Services.AddSingleton<IDatabaseBootstrap, DatabaseBootstrap>();
 

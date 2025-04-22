@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\Questao5.props" />
-</Project>
