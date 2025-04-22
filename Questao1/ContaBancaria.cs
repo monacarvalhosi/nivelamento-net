@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace Questao1
+﻿namespace Questao1
 {
     public class ContaBancaria {
 

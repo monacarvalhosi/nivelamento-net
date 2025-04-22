@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Questao2.Clients;
+using Questao2.Helper;
+using Questao2.Models.Requests;
 
 public class Program
 {
@@ -23,8 +25,26 @@ public class Program
 
     public static int getTotalScoredGoals(string team, int year)
     {
-        
-        return 0;
+        var url = "https://jsonmock.hackerrank.com/api/football_matches";
+
+        var queryHomeTeam = new QueryFilter();
+        queryHomeTeam.Team1 = team;
+        queryHomeTeam.Year = year;
+
+        var queryAwayTeam = new QueryFilter();
+        queryAwayTeam.Team2 = team;
+        queryAwayTeam.Year = year;
+
+        var httpClient = new HttpClient();
+        var helper = new HttpClientHelper(httpClient);
+        var resultHomeTeam = helper.GetAllPages(url, queryHomeTeam);
+        var resultAwayTeam = helper.GetAllPages(url, queryAwayTeam);
+
+
+        var golsHomeTeam = StatisticsHelper.CalculateGoalsByYear(resultHomeTeam);
+        var golsAwayTeam = StatisticsHelper.CalculateGoalsByYear(resultAwayTeam);
+
+        return golsHomeTeam.GolsTeam1 + golsAwayTeam.GolsTeam2;
     }
 
 }
